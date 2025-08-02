@@ -3,7 +3,7 @@ name: Build and Push Docker Image
 on:
   push:
     branches:
-      - docker    # or your branch name, e.g., docker
+      - git_action    # or your branch name, e.g., docker
 
 jobs:
   build:
