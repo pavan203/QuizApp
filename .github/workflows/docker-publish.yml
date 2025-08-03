@@ -23,13 +23,16 @@ jobs:
     - name: Login to Docker Hub
       uses: docker/login-action@v2
       with:
-        username: ${{ secrets.DOCKER_HUB_USERNAME }}
-        password: ${{ secrets.DOCKER_HUB_TOKEN }}
+        username: ${{ secrets.DOCKER_HUB_USERNAME }}  # MUST use secrets
+        password: ${{ secrets.DOCKER_HUB_TOKEN }}    # NEVER hardcode
 
     - name: Build and push
       uses: docker/build-push-action@v4
       with:
+        context: .
+        file: ./Dockerfile
+        push: true
         tags: |
-          yourname/quizapp: latest
+          yourname/quizapp:latest
           yourname/quizapp:${{ github.sha }}
-          yourname/quizapp:${{ github.run_number }}  # Bonus: Add sequential build number
+          yourname/quizapp:run-${{ github.run_number }}
