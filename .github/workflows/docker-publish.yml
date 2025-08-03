@@ -1,7 +1,7 @@
 name: Build and Push Docker Image
 
 on:
-  workflow_dispatch:    # 👈 Add this line
+  workflow_dispatch:
   push:
     branches:
       - git_action
@@ -21,19 +21,11 @@ jobs:
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v2
 
-    - name: Login to Docker Hub
-      uses: docker/login-action@v2
+    - name: Build and Push Docker Image
+      uses: mr-smithers-excellent/docker-build-push@v4
       with:
-        username: ${{ secrets.DOCKER_HUB_USERNAME }}  # MUST use secrets
-        password: ${{ secrets.DOCKER_HUB_TOKEN }}    # NEVER hardcode
-
-    - name: Build and push
-      uses: docker/build-push-action@v4
-      with:
-        context: .
-        file: ./Dockerfile
-        push: true
-        tags: |
-          yourname/quizapp:latest
-          yourname/quizapp:${{ github.sha }}
-          yourname/quizapp:run-${{ github.run_number }}
+        image: zangetsu203/quizapp
+        registry: docker.io
+        username: ${{ secrets.DOCKER_HUB_USERNAME }}
+        password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+        tag: latest,${{ github.sha }},run-${{ github.run_number }}
