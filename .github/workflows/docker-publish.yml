@@ -15,17 +15,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v2
-
-    - name: Build and Push Docker Image
-      uses: mr-smithers-excellent/docker-build-push@v4
-      with:
-        image: zangetsu203/quizapp
-        registry: docker.io
-        username: ${{ secrets.DOCKER_HUB_USERNAME }}
-        password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
-        tag: latest,${{ github.sha }},run-${{ github.run_number }}
+      - name: Build and Push Docker Image
+        uses: mr-smithers-excellent/docker-build-push@v6  # ⬅️ Use correct version (latest is v6)
+        with:
+          image: zangetsu203/quizapp
+          registry: docker.io
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+          tags: latest,${{ github.sha }},run-${{ github.run_number }}  # ⬅️ Must be `tags` not `tag`
