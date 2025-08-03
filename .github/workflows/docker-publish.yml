@@ -1,6 +1,7 @@
 name: Build and Push Docker Image
 
 on:
+  workflow_dispatch:    # 👈 Add this line
   push:
     branches:
       - git_action
