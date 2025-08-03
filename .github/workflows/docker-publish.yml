@@ -3,7 +3,11 @@ name: Build and Push Docker Image
 on:
   push:
     branches:
-      - git_action    # or your branch name, e.g., docker
+      - git_action
+    paths:
+      - 'Dockerfile'
+      - 'src/**'
+      - 'pom.xml'
 
 jobs:
   build:
@@ -19,13 +23,16 @@ jobs:
     - name: Login to Docker Hub
       uses: docker/login-action@v2
       with:
-        username: zangestu203
-        password: @Pavan203
+        username: ${{ secrets.DOCKER_HUB_USERNAME }}  # MUST use secrets
+        password: ${{ secrets.DOCKER_HUB_TOKEN }}    # NEVER hardcode
 
-    - name: Build and push Docker image
+    - name: Build and push
       uses: docker/build-push-action@v4
       with:
         context: .
         file: ./Dockerfile
         push: true
-        tags: zangetsu203/quizapp:latest
+        tags: |
+          yourname/quizapp:latest
+          yourname/quizapp:${{ github.sha }}
+          yourname/quizapp:run-${{ github.run_number }}
