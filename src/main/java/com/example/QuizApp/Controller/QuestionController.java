@@ -20,6 +20,7 @@ public class QuestionController {
 
 	@GetMapping("/AllQuestions")
 	public ResponseEntity<List<Question>> AllQuestions() {
+
 		return new ResponseEntity<>(qs.getAllQuestions(), HttpStatus.OK);
 
 	}

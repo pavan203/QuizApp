@@ -16,7 +16,7 @@ public class QuestionService {
 
     //@Cacheable(value = "questions", key = "'allQuestions'")
     public List<Question>getAllQuestions(){
-        System.out.println("Fetching from DataBase - not from cache");
+        System.out.println("Fetching from the DataBase - not from cache");
 
         return qd.findAll();
 
