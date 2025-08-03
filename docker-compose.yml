@@ -1,55 +1,81 @@
+version: '3.9'
 
 services:
   mongodb:
     image: mongo:latest
     container_name: mongodb
     ports:
-      - "27017:27017"   # Hi
+      - "27017:27017"
     networks:
-      - my-network
+      - quizapp-network
     volumes:
       - mongo-data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
-  redis:
-    image: redis:latest
-    container_name: redis
-    ports:
-      - "6379:6379"     # Host port 6379 maps to Redis default 6379
-    networks:
-      - my-network
-    volumes:
-      - redis-data:/data
+ # redis:
+ #   image: redis:latest
+ #   container_name: redis
+ #   ports:
+ #     - "6379:6379"
+ #   networks:
+ #     - quizapp-network
+ #   volumes:
+ #     - redis-data:/data
+ #   healthcheck:
+ #     test: ["CMD", "redis-cli", "ping"]
+ #     interval: 10s
+  #    timeout: 5s
+  #    retries: 5
+  #  restart: unless-stopped
 
   mongo-express:
     image: mongo-express:latest
     container_name: mongo-express
     ports:
-      - "8081:8081"    # Access mongo-express UI on localhost:8081
+      - "8081:8081"
     environment:
-      - ME_CONFIG_MONGODB_SERVER=mongodb
-      - ME_CONFIG_MONGODB_PORT=27017
-      - ME_CONFIG_BASICAUTH=false
+      SPRING_REDIS_HOST: redis
+      SPRING_REDIS_PORT: 6379
+      ME_CONFIG_MONGODB_SERVER: mongodb
+      ME_CONFIG_MONGODB_PORT: 27017
+      ME_CONFIG_BASICAUTH: "false"
     networks:
-      - my-network
+      - quizapp-network
+    depends_on:
+      mongodb:
+        condition: service_healthy
 
   quizapp:
     container_name: quizapp
     build:
       context: .
-      dockerfile: DockerFile
+      dockerfile: Dockerfile
     image: quizapp
     ports:
       - "8082:8082"
+    environment:
+      SPRING_REDIS_HOST: redis
+      SPRING_REDIS_PORT: 6379
+      SPRING_DATA_MONGODB_URI: mongodb://mongodb:27017/quizdb
     depends_on:
-      - mongodb
-      - redis
+      #redis:
+      #  condition: service_healthy
+      mongodb:
+        condition: service_healthy
     networks:
-      - my-network
+      - quizapp-network
+       # aliases:
+       #   - redis-host
+    restart: unless-stopped
 
 networks:
-  my-network:
+  quizapp-network:
     driver: bridge
 
 volumes:
   mongo-data:
-  redis-data:
+  #redis-data:

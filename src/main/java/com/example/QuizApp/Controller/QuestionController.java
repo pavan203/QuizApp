@@ -20,8 +20,8 @@ public class QuestionController {
 
 	@GetMapping("/AllQuestions")
 	public ResponseEntity<List<Question>> AllQuestions() {
-
 		return new ResponseEntity<>(qs.getAllQuestions(), HttpStatus.OK);
+
 	}
 
 	@GetMapping("/{lang}")
@@ -38,8 +38,8 @@ public class QuestionController {
 	}
 	@Autowired
 	QuestionDao qd;
-	@CacheEvict(value = "questions", key = "'allQuestions'")
 
+	//@CacheEvict(value = "questions", key = "'allQuestions'")
 	@DeleteMapping("/remove/{qNo}")
 	public ResponseEntity<?> remove(@PathVariable int qNo){
 		qd.deleteByqNo(qNo);

@@ -14,9 +14,9 @@ public class QuestionService {
     @Autowired
     QuestionDao qd;
 
-    @Cacheable(value = "questions", key = "'allQuestions'")
+    //@Cacheable(value = "questions", key = "'allQuestions'")
     public List<Question>getAllQuestions(){
-        System.out.println("Fetching from DB - not from cache");
+        System.out.println("Fetching from DataBase - not from cache");
 
         return qd.findAll();
 
@@ -26,7 +26,7 @@ public class QuestionService {
         return qd.findAllByLanguageIgnoreCase(lang);
     }
 
-    @CacheEvict(value = "questions", key = "'allQuestions'")
+    //@CacheEvict(value = "questions", key = "'allQuestions'")
     public void addQuestion(Question question) {
         System.out.println("Received qNo: " + question.getQNo());
         qd.save(question);
