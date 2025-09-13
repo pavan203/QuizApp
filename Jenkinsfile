@@ -11,7 +11,7 @@ pipeline {
                 bat 'mvn clean install -DskipTests'
 
                 // Stash the JAR for slave
-                stash includes: 'target/my-app-1.0-SNAPSHOT.jar', name: 'app-jar', useDefaultExcludes: false
+                stash includes: 'target/QuizApp-0.0.1-SNAPSHOT.jar', name: 'app-jar', useDefaultExcludes: false
             }
         }
 
@@ -25,7 +25,7 @@ pipeline {
                 unstash 'app-jar'
 
                 // Run the JAR
-                sh 'java -jar target/my-app-1.0-SNAPSHOT.jar'
+                 sh 'java -jar QuizApp-0.0.1-SNAPSHOT.jar'
             }
         }
     }
