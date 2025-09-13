@@ -25,7 +25,7 @@ pipeline {
                 unstash 'app-jar'
                 sh 'rm -f HELP.md QuizApp.iml mvnw mvnw.cmd Jenkinsfile src/*'
                 // Run the JAR
-                 sh 'java -jar QuizApp-0.0.1-SNAPSHOT.jar'
+                 sh 'java -jar target/QuizApp-0.0.1-SNAPSHOT.jar'
             }
         }
     }
